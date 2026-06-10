@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradient Identity</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --bg:#0d0d0d;
+  --surface:#161616;
+  --border:#272727;
+  --text:#f0efe8;
+  --muted:#666;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',sans-serif;
+  min-height:100vh;
+}
+
+/* ── Steps ── */
+.step{display:none;}
+.step.active{display:flex;flex-direction:column;align-items:center;}
+
+/* ── Step 1 ── */
+#s1{
+  min-height:100vh;
+  justify-content:center;
+  padding:80px 24px;
+}
+
+.wordmark{
+  font-size:10px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.headline{
+  font-size:clamp(22px,3.5vw,38px);
+  font-weight:300;
+  letter-spacing:-.02em;
+  color:var(--text);
+  margin-bottom:64px;
+  text-align:center;
+}
+
+.panels{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  width:100%;
+  max-width:940px;
+  margin-bottom:52px;
+}
+
+@media(max-width:680px){
+  .panels{grid-template-columns:1fr;}
+}
+
+.panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:26px 22px 22px;
+  transition:border-color .3s;
+}
+
+.panel.flash{border-color:rgba(255,255,255,.28);}
+
+.panel-num{
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+
+.panel-title{
+  font-size:14px;
+  font-weight:500;
+  color:var(--text);
+  margin-bottom:18px;
+}
+
+.tags{display:flex;flex-wrap:wrap;gap:7px;max-height:160px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.tags::-webkit-scrollbar{width:3px;}
+.tags::-webkit-scrollbar-track{background:transparent;}
+.tags::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+.tag{
+  padding:7px 13px;
+  border-radius:100px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:border-color .15s,color .15s,background .15s;
+  line-height:1;
+}
+
+.tag:hover{border-color:#555;color:var(--text);}
+.tag.on{background:var(--text);border-color:var(--text);color:#000;}
+
+/* Slider */
+.eng-val{
+  font-size:34px;
+  font-weight:200;
+  letter-spacing:-.03em;
+  line-height:1;
+  margin-bottom:3px;
+}
+
+.eng-unit{
+  font-size:10px;
+  color:var(--muted);
+  margin-bottom:18px;
+}
+
+input[type=range]{
+  -webkit-appearance:none;
+  appearance:none;
+  width:100%;
+  height:1px;
+  background:var(--border);
+  outline:none;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--text);
+  cursor:pointer;
+}
+
+.eng-hint{font-size:10px;color:var(--muted);line-height:1.5;}
+
+/* CTA */
+.gen-btn{
+  padding:15px 50px;
+  border-radius:100px;
+  border:none;
+  background:var(--text);
+  color:#000;
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:.04em;
+  cursor:pointer;
+  font-family:inherit;
+  transition:opacity .2s;
+}
+
+.gen-btn:hover{opacity:.82;}
+
+/* ── Step 2 ── */
+#s2{
+  min-height:100vh;
+  background:#000;
+  position:relative;
+  justify-content:flex-start;
+}
+
+#anim-canvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  display:block;
+}
+
+.anim-overlay{
+  position:fixed;
+  bottom:50px;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+  z-index:10;
+  pointer-events:none;
+}
+
+.anim-label{
+  font-size:9px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.35);
+  margin-bottom:11px;
+}
+
+.prog-track{
+  width:160px;
+  height:1px;
+  background:rgba(255,255,255,.1);
+  border-radius:1px;
+  overflow:hidden;
+  margin:0 auto 13px;
+}
+
+.prog-fill{
+  height:100%;
+  background:rgba(255,255,255,.75);
+  width:0;
+  transition:width .06s linear;
+}
+
+.phase-text{
+  font-size:11px;
+  color:rgba(255,255,255,.45);
+  min-height:16px;
+}
+
+/* ── Step 3 ── */
+#s3{
+  min-height:100vh;
+  justify-content:center;
+  padding:72px 24px;
+  gap:28px;
+}
+
+.result-eyebrow{
+  font-size:9px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+#result-canvas{
+  border-radius:5px;
+  max-width:min(560px,90vw);
+  aspect-ratio:1/1;
+  width:100%;
+  display:block;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+}
+
+.result-meta{
+  display:flex;
+  gap:36px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.meta-key{
+  font-size:9px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+.meta-val{font-size:13px;color:var(--text);}
+
+.result-actions{display:flex;gap:9px;}
+
+.btn-ghost{
+  padding:11px 26px;
+  border-radius:100px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:color .15s,border-color .15s;
+}
+
+.btn-ghost:hover{color:var(--text);border-color:#555;}
+
+.btn-solid{
+  padding:11px 26px;
+  border-radius:100px;
+  border:1px solid rgba(240,239,232,.2);
+  background:transparent;
+  color:var(--text);
+  font-size:12px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:background .15s,color .15s;
+}
+
+.btn-solid:hover{background:var(--text);color:#000;}
+</style>
+</head>
+<body>
+
+<!-- ── STEP 1 ── -->
+<section id="s1" class="step active">
+  <p class="wordmark">Gradient Identity</p>
+  <h1 class="headline">당신만의 시각적 아이덴티티를 생성하세요</h1>
+
+  <div class="panels">
+    <div class="panel" id="panel-color">
+      <p class="panel-num">01 — 시각적 분석</p>
+      <p class="panel-title">색상 톤 선택</p>
+      <div class="tags" id="color-tags">
+        <button class="tag" data-val="warm">따뜻한</button>
+        <button class="tag" data-val="urban">도시적인</button>
+        <button class="tag" data-val="nature">자연의</button>
+        <button class="tag" data-val="sensual">감각적인</button>
+        <button class="tag" data-val="dreamy">몽환적인</button>
+        <button class="tag" data-val="minimal">미니멀한</button>
+        <button class="tag" data-val="everyday">일상적인</button>
+        <button class="tag" data-val="natural">자연스러운</button>
+        <button class="tag" data-val="chic">시크</button>
+        <button class="tag" data-val="city">도시적</button>
+        <button class="tag" data-val="kitsch">키치</button>
+        <button class="tag" data-val="y2k">Y2K</button>
+        <button class="tag" data-val="casual">캐주얼</button>
+        <button class="tag" data-val="mixmatch">믹스매치</button>
+        <button class="tag" data-val="free">자유로운</button>
+        <button class="tag" data-val="achromatic">무채색</button>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-lang">
+      <p class="panel-num">02 — 언어적 분석</p>
+      <p class="panel-title">표현 방식 선택</p>
+      <div class="tags" id="lang-tags">
+        <button class="tag" data-val="emotional">감성적인</button>
+        <button class="tag" data-val="logical">논리적인</button>
+        <button class="tag" data-val="humorous">유머러스한</button>
+        <button class="tag" data-val="intuitive">직관적인</button>
+        <button class="tag" data-val="narrative">서사적인</button>
+        <button class="tag" data-val="simple">심플한</button>
+        <button class="tag" data-val="intimate">친밀한</button>
+        <button class="tag" data-val="liberating">자유로운</button>
+        <button class="tag" data-val="meme">밈</button>
+        <button class="tag" data-val="cozy">편안한</button>
+        <button class="tag" data-val="global">글로벌한</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <p class="panel-num">03 — 반응 분석</p>
+      <p class="panel-title">평균 반응 수 입력</p>
+      <div class="eng-val" id="eng-val">2,400</div>
+      <div class="eng-unit">좋아요 · 댓글 · 저장 합산</div>
+      <input type="range" id="eng-slider" min="100" max="50000" value="2400" step="100">
+      <p class="eng-hint">수치가 높을수록 패턴 밀도가 증가합니다</p>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="gen-btn">아이덴티티 생성하기</button>
+</section>
+
+<!-- ── STEP 2 ── -->
+<section id="s2" class="step">
+  <canvas id="anim-canvas"></canvas>
+  <div class="anim-overlay">
+    <p class="anim-label">분석 중</p>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+    <p class="phase-text" id="phase-text">시각 데이터를 처리하는 중...</p>
+  </div>
+</section>
+
+<!-- ── STEP 3 ── -->
+<section id="s3" class="step">
+  <p class="result-eyebrow">Your Gradient Identity</p>
+  <canvas id="result-canvas" width="560" height="560"></canvas>
+  <div class="result-meta" id="result-meta"></div>
+  <div class="result-actions">
+    <button class="btn-ghost" id="reset-btn">다시 만들기</button>
+    <button class="btn-solid" id="save-btn">저장하기</button>
+  </div>
+</section>
+
+<script>
+'use strict';
+
+// ── Color presets (c1=t:0, c2=t:0.5, c3=t:1) ──────────────────────────────
+const COLORS = {
+  // 기존
+  warm:       {c1:[255,100,38],  c2:[255,215,95],  c3:[140,22,12]},
+  urban:      {c1:[12,30,88],    c2:[198,218,255], c3:[50,90,170]},
+  nature:     {c1:[7,42,16],     c2:[192,238,25],  c3:[22,85,35]},
+  sensual:    {c1:[52,188,222],  c2:[255,255,255], c3:[198,42,202]},
+  dreamy:     {c1:[72,30,152],   c2:[250,210,255], c3:[172,65,212]},
+  minimal:    {c1:[16,16,16],    c2:[208,208,204], c3:[240,240,236]},
+  // 신규
+  everyday:   {c1:[135,110,85],  c2:[238,225,205], c3:[190,168,140]}, // 베이지·샌드 뉴트럴
+  natural:    {c1:[55,60,35],    c2:[185,188,145], c3:[90,100,60]},   // 머티드 올리브·세이지
+  chic:       {c1:[14,14,18],    c2:[145,142,148], c3:[238,234,232]}, // 다크 → 쿨그레이 → 오프화이트
+  city:       {c1:[5,15,45],     c2:[0,210,175],   c3:[255,235,70]},  // 네이비·야간도시 네온
+  kitsch:     {c1:[255,15,140],  c2:[255,255,0],   c3:[0,210,90]},    // 핫핑크·옐로·라임
+  y2k:        {c1:[0,235,215],   c2:[255,255,255], c3:[210,175,255]}, // 터콰이즈·화이트·라벤더
+  casual:     {c1:[195,158,240], c2:[255,232,210], c3:[140,210,200]}, // 라벤더·피치·민트
+  mixmatch:   {c1:[255,75,35],   c2:[252,245,195], c3:[0,175,200]},   // 오렌지·크림·틸
+  free:       {c1:[70,185,240],  c2:[235,248,255], c3:[155,225,255]}, // 스카이블루 그라디언트
+  achromatic: {c1:[10,10,10],    c2:[165,165,165], c3:[248,248,248]}, // 순수 무채색
+};
+
+// ── Pattern presets ─────────────────────────────────────────────────────────
+const PATTERNS = {
+  // 기존
+  emotional:  {fn:'interference', xf:'mirror'},   // 미러 간섭 → 렌즈 다이아몬드
+  logical:    {fn:'staircase',    xf:'none'},      // 계단식 직각 밴드
+  humorous:   {fn:'diagonal',     xf:'rotate'},    // 회전 대각선 스트라이프
+  intuitive:  {fn:'radial',       xf:'none'},      // 동심원
+  narrative:  {fn:'cross',        xf:'reflect'},   // 반사 크로스 → 모래시계
+  // 신규
+  simple:     {fn:'diagonal',     xf:'none'},      // 심플 직선 밴드
+  intimate:   {fn:'interference', xf:'none'},      // 변환 없는 부드러운 간섭
+  liberating: {fn:'radial',       xf:'rotate'},    // 회전 동심원 → 소용돌이
+  meme:       {fn:'staircase',    xf:'rotate'},    // 회전 계단 → 유쾌한 픽셀
+  cozy:       {fn:'cross',        xf:'none'},      // 순수 크로스 → 격자
+  global:     {fn:'radial',       xf:'reflect'},   // 반사 동심원 → 지구본
+};
+
+const PHASE_MSGS = [
+  [0.00,'시각 데이터를 처리하는 중...'],
+  [0.33,'언어 패턴을 분석하는 중...'],
+  [0.62,'반응 수치를 통합하는 중...'],
+  [0.88,'아이덴티티를 합성하는 중...'],
+];
+
+const COLOR_LABELS = {
+  warm:'따뜻한', urban:'도시적인', nature:'자연의',
+  sensual:'감각적인', dreamy:'몽환적인', minimal:'미니멀한',
+  everyday:'일상적인', natural:'자연스러운', chic:'시크',
+  city:'도시적', kitsch:'키치', y2k:'Y2K',
+  casual:'캐주얼', mixmatch:'믹스매치', free:'자유로운',
+  achromatic:'무채색',
+};
+const LANG_LABELS = {
+  emotional:'감성적인', logical:'논리적인', humorous:'유머러스한',
+  intuitive:'직관적인', narrative:'서사적인',
+  simple:'심플한', intimate:'친밀한', liberating:'자유로운',
+  meme:'밈', cozy:'편안한', global:'글로벌한',
+};
+
+// ── App state ───────────────────────────────────────────────────────────────
+const sel = {color:null, lang:null, engagement:2400};
+let genConfig = null;
+let animRaf   = null;
+
+// ── Helpers ─────────────────────────────────────────────────────────────────
+function showStep(id){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function flash(panelId){
+  const el=document.getElementById(panelId);
+  el.classList.add('flash');
+  setTimeout(()=>el.classList.remove('flash'),900);
+}
+
+// ── Step 1: inputs ──────────────────────────────────────────────────────────
+function initTagGroup(groupId, key){
+  document.getElementById(groupId).addEventListener('click',e=>{
+    const btn=e.target.closest('.tag');
+    if(!btn) return;
+    document.getElementById(groupId).querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));
+    btn.classList.add('on');
+    sel[key]=btn.dataset.val;
+  });
+}
+
+initTagGroup('color-tags','color');
+initTagGroup('lang-tags','lang');
+
+const slider=document.getElementById('eng-slider');
+const engVal=document.getElementById('eng-val');
+slider.addEventListener('input',()=>{
+  sel.engagement=+slider.value;
+  engVal.textContent=sel.engagement.toLocaleString();
+});
+
+// ── Pixel engine ─────────────────────────────────────────────────────────────
+function lerp3(c1,c2,c3,t){
+  t=Math.max(0,Math.min(1,t));
+  let a,b,u;
+  if(t<=.5){a=c1;b=c2;u=t*2;}
+  else     {a=c2;b=c3;u=(t-.5)*2;}
+  return[a[0]+(b[0]-a[0])*u, a[1]+(b[1]-a[1])*u, a[2]+(b[2]-a[2])*u];
+}
+
+function patternVal(nx,ny,fn,xf,freq){
+  let x=nx, y=ny;
+
+  switch(xf){
+    case 'mirror':  x=Math.abs(x); break;
+    case 'rotate':{
+      const a=Math.PI/4.5;
+      const rx=x*Math.cos(a)-y*Math.sin(a);
+      const ry=x*Math.sin(a)+y*Math.cos(a);
+      x=rx; y=ry; break;
+    }
+    case 'reflect': y=Math.abs(y); break;
+  }
+
+  const f=freq*Math.PI;
+  switch(fn){
+    case 'interference':
+      return Math.sin(x*f)*Math.sin(y*f);
+    case 'staircase':{
+      const steps=Math.max(3,Math.round(freq*1.6));
+      const sx=Math.floor(x*steps)/steps;
+      const sy=Math.floor(y*steps)/steps;
+      return Math.sin((sx+sy)*f*.9);
+    }
+    case 'diagonal':
+      return Math.sin((x+y)*f);
+    case 'radial':
+      return Math.sin(Math.hypot(x,y)*f*1.4);
+    case 'cross':
+      return .5*(Math.sin(x*f)+Math.sin(y*f));
+    default:
+      return Math.sin(x*f)*Math.sin(y*f);
+  }
+}
+
+function drawPattern(canvas, cfg, progress, time, scale){
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  const sc=scale||5;
+  const lW=Math.ceil(W/sc), lH=Math.ceil(H/sc);
+  const img=ctx.createImageData(W,H);
+  const d=img.data;
+
+  const {fn,xf,colors:{c1,c2,c3}}=cfg;
+  const p=progress==null?1:progress;
+  const noise=1-p;
+  // frequency converges from low to final
+  const eff=cfg.freq*(0.25+0.75*p);
+
+  for(let py=0;py<lH;py++){
+    for(let px=0;px<lW;px++){
+      const nx=(px/lW)*2-1;
+      const ny=(py/lH)*2-1;
+
+      // animated warp during analysis
+      const warp=noise*.55*Math.sin(nx*9.1+time*2.2+ny*6.3);
+      let v=patternVal(nx+warp, ny+warp*.6, fn, xf, eff);
+
+      // blend with noise early on
+      if(noise>0){
+        const r=Math.sin(nx*25.7+time*1.4)*Math.cos(ny*19.3-time*2.3);
+        v=v*p+r*noise*.55;
+      }
+
+      const t=(v+1)/2;
+      let [r,g,b]=lerp3(c1,c2,c3,t);
+
+      // desaturate during anim
+      if(noise>0){
+        const gr=r*.299+g*.587+b*.114;
+        r=r*p+gr*noise;
+        g=g*p+gr*noise;
+        b=b*p+gr*noise;
+      }
+
+      // fill block
+      const ir=r|0, ig=g|0, ib=b|0;
+      for(let dy=0;dy<sc;dy++){
+        const row=py*sc+dy; if(row>=H) break;
+        for(let dx=0;dx<sc;dx++){
+          const col=px*sc+dx; if(col>=W) break;
+          const i=(row*W+col)*4;
+          d[i]=ir; d[i+1]=ig; d[i+2]=ib; d[i+3]=255;
+        }
+      }
+    }
+  }
+  ctx.putImageData(img,0,0);
+}
+
+// ── Generate ─────────────────────────────────────────────────────────────────
+document.getElementById('gen-btn').addEventListener('click',()=>{
+  let ok=true;
+  if(!sel.color){flash('panel-color');ok=false;}
+  if(!sel.lang) {flash('panel-lang'); ok=false;}
+  if(!ok) return;
+
+  // engagement → frequency: log scale, range 2.5–10
+  const dt=Math.log(Math.max(sel.engagement,100)/100)/Math.log(500);
+  const freq=2.5+dt*7.5;
+
+  genConfig={
+    fn:     PATTERNS[sel.lang].fn,
+    xf:     PATTERNS[sel.lang].xf,
+    freq:   freq,
+    colors: COLORS[sel.color],
+  };
+
+  if(animRaf) cancelAnimationFrame(animRaf);
+  showStep('s2');
+
+  // Size anim canvas to viewport (retina-aware)
+  const dpr=Math.min(devicePixelRatio,2);
+  const animCanvas=document.getElementById('anim-canvas');
+  animCanvas.width =window.innerWidth *dpr;
+  animCanvas.height=window.innerHeight*dpr;
+  animCanvas.style.width =window.innerWidth +'px';
+  animCanvas.style.height=window.innerHeight+'px';
+
+  // Large scale for animation (perf + drama)
+  const animScale=Math.max(7,Math.round(Math.min(animCanvas.width,animCanvas.height)/100));
+
+  const DURATION=3400;
+  const t0=performance.now();
+  const progFill=document.getElementById('prog-fill');
+  const phaseEl =document.getElementById('phase-text');
+
+  function frame(now){
+    const elapsed=now-t0;
+    const p=Math.min(elapsed/DURATION,1);
+
+    progFill.style.width=(p*100)+'%';
+
+    let label=PHASE_MSGS[0][1];
+    for(const[thr,txt] of PHASE_MSGS) if(p>=thr) label=txt;
+    phaseEl.textContent=label;
+
+    drawPattern(animCanvas, genConfig, p, elapsed/1000, animScale);
+
+    if(p<1){
+      animRaf=requestAnimationFrame(frame);
+    } else {
+      setTimeout(showFinal,380);
+    }
+  }
+
+  animRaf=requestAnimationFrame(frame);
+});
+
+// ── Final result ─────────────────────────────────────────────────────────────
+function showFinal(){
+  showStep('s3');
+  const rc=document.getElementById('result-canvas');
+  rc.width=560; rc.height=560;
+  drawPattern(rc, genConfig, 1, 0, 4);
+
+  document.getElementById('result-meta').innerHTML=`
+    <div class="meta-item">
+      <div class="meta-key">Color Tone</div>
+      <div class="meta-val">${COLOR_LABELS[sel.color]}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-key">Pattern Style</div>
+      <div class="meta-val">${LANG_LABELS[sel.lang]}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-key">Density</div>
+      <div class="meta-val">${sel.engagement.toLocaleString()} 반응</div>
+    </div>
+  `;
+}
+
+// ── Actions ──────────────────────────────────────────────────────────────────
+document.getElementById('reset-btn').addEventListener('click',()=>{
+  if(animRaf) cancelAnimationFrame(animRaf);
+  showStep('s1');
+});
+
+document.getElementById('save-btn').addEventListener('click',()=>{
+  const rc=document.getElementById('result-canvas');
+  const a=document.createElement('a');
+  a.download='gradient-identity-'+Date.now()+'.png';
+  a.href=rc.toDataURL('image/png');
+  a.click();
+});
+</script>
+</body>
+</html>
