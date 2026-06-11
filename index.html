@@ -22,272 +22,107 @@ body{
   min-height:100vh;
 }
 
-/* ── Steps ── */
 .step{display:none;}
 .step.active{display:flex;flex-direction:column;align-items:center;}
 
 /* ── Step 1 ── */
-#s1{
-  min-height:100vh;
-  justify-content:center;
-  padding:80px 24px;
-}
+#s1{min-height:100vh;justify-content:center;padding:80px 24px;}
 
-.wordmark{
-  font-size:10px;
-  letter-spacing:.28em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:14px;
-}
-
-.headline{
-  font-size:clamp(22px,3.5vw,38px);
-  font-weight:300;
-  letter-spacing:-.02em;
-  color:var(--text);
-  margin-bottom:64px;
-  text-align:center;
-}
+.wordmark{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.headline{font-size:clamp(22px,3.5vw,38px);font-weight:300;letter-spacing:-.02em;color:var(--text);margin-bottom:64px;text-align:center;}
 
 .panels{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  width:100%;
-  max-width:940px;
-  margin-bottom:52px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  width:100%;max-width:940px;margin-bottom:52px;
 }
-
-@media(max-width:680px){
-  .panels{grid-template-columns:1fr;}
-}
+@media(max-width:680px){.panels{grid-template-columns:1fr;}}
 
 .panel{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:26px 22px 22px;
-  transition:border-color .3s;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:18px;padding:26px 22px 22px;transition:border-color .3s;
 }
-
 .panel.flash{border-color:rgba(255,255,255,.28);}
 
-.panel-num{
-  font-size:9px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:5px;
-}
+.panel-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px;}
+.panel-num{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.panel-count{font-size:9px;letter-spacing:.08em;color:var(--muted);transition:color .2s;}
+.panel-count.active{color:var(--text);}
 
-.panel-title{
-  font-size:14px;
-  font-weight:500;
-  color:var(--text);
-  margin-bottom:18px;
-}
+.panel-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:18px;}
 
-.tags{display:flex;flex-wrap:wrap;gap:7px;max-height:160px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+.tags{
+  display:flex;flex-wrap:wrap;gap:7px;
+  max-height:160px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
 .tags::-webkit-scrollbar{width:3px;}
 .tags::-webkit-scrollbar-track{background:transparent;}
 .tags::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
 .tag{
-  padding:7px 13px;
-  border-radius:100px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:var(--muted);
-  font-size:12px;
-  cursor:pointer;
-  font-family:inherit;
-  transition:border-color .15s,color .15s,background .15s;
-  line-height:1;
+  padding:7px 13px;border-radius:100px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--muted);font-size:12px;cursor:pointer;
+  font-family:inherit;line-height:1;
+  transition:border-color .15s,color .15s,background .15s,opacity .15s;
 }
-
 .tag:hover{border-color:#555;color:var(--text);}
 .tag.on{background:var(--text);border-color:var(--text);color:#000;}
+.tag.maxed{opacity:.32;cursor:default;pointer-events:none;}
 
 /* Slider */
-.eng-val{
-  font-size:34px;
-  font-weight:200;
-  letter-spacing:-.03em;
-  line-height:1;
-  margin-bottom:3px;
-}
-
-.eng-unit{
-  font-size:10px;
-  color:var(--muted);
-  margin-bottom:18px;
-}
-
+.eng-val{font-size:34px;font-weight:200;letter-spacing:-.03em;line-height:1;margin-bottom:3px;}
+.eng-unit{font-size:10px;color:var(--muted);margin-bottom:18px;}
 input[type=range]{
-  -webkit-appearance:none;
-  appearance:none;
-  width:100%;
-  height:1px;
-  background:var(--border);
-  outline:none;
-  cursor:pointer;
-  margin-bottom:10px;
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:1px;background:var(--border);outline:none;cursor:pointer;margin-bottom:10px;
 }
-
 input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:var(--text);
-  cursor:pointer;
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--text);cursor:pointer;
 }
-
 .eng-hint{font-size:10px;color:var(--muted);line-height:1.5;}
 
-/* CTA */
 .gen-btn{
-  padding:15px 50px;
-  border-radius:100px;
-  border:none;
-  background:var(--text);
-  color:#000;
-  font-size:13px;
-  font-weight:500;
-  letter-spacing:.04em;
-  cursor:pointer;
-  font-family:inherit;
-  transition:opacity .2s;
+  padding:15px 50px;border-radius:100px;border:none;
+  background:var(--text);color:#000;font-size:13px;font-weight:500;
+  letter-spacing:.04em;cursor:pointer;font-family:inherit;transition:opacity .2s;
 }
-
 .gen-btn:hover{opacity:.82;}
 
 /* ── Step 2 ── */
-#s2{
-  min-height:100vh;
-  background:#000;
-  position:relative;
-  justify-content:flex-start;
-}
-
-#anim-canvas{
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  display:block;
-}
-
+#s2{min-height:100vh;background:#000;position:relative;justify-content:flex-start;}
+#anim-canvas{position:fixed;top:0;left:0;width:100%;height:100%;display:block;}
 .anim-overlay{
-  position:fixed;
-  bottom:50px;
-  left:50%;
-  transform:translateX(-50%);
-  text-align:center;
-  z-index:10;
-  pointer-events:none;
+  position:fixed;bottom:50px;left:50%;transform:translateX(-50%);
+  text-align:center;z-index:10;pointer-events:none;
 }
-
-.anim-label{
-  font-size:9px;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.35);
-  margin-bottom:11px;
-}
-
-.prog-track{
-  width:160px;
-  height:1px;
-  background:rgba(255,255,255,.1);
-  border-radius:1px;
-  overflow:hidden;
-  margin:0 auto 13px;
-}
-
-.prog-fill{
-  height:100%;
-  background:rgba(255,255,255,.75);
-  width:0;
-  transition:width .06s linear;
-}
-
-.phase-text{
-  font-size:11px;
-  color:rgba(255,255,255,.45);
-  min-height:16px;
-}
+.anim-label{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:11px;}
+.prog-track{width:160px;height:1px;background:rgba(255,255,255,.1);border-radius:1px;overflow:hidden;margin:0 auto 13px;}
+.prog-fill{height:100%;background:rgba(255,255,255,.75);width:0;transition:width .06s linear;}
+.phase-text{font-size:11px;color:rgba(255,255,255,.45);min-height:16px;}
 
 /* ── Step 3 ── */
-#s3{
-  min-height:100vh;
-  justify-content:center;
-  padding:72px 24px;
-  gap:28px;
-}
-
-.result-eyebrow{
-  font-size:9px;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  color:var(--muted);
-}
-
+#s3{min-height:100vh;justify-content:center;padding:72px 24px;gap:28px;}
+.result-eyebrow{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
 #result-canvas{
-  border-radius:5px;
-  max-width:min(560px,90vw);
-  aspect-ratio:1/1;
-  width:100%;
-  display:block;
-  image-rendering:pixelated;
-  image-rendering:crisp-edges;
+  border-radius:5px;max-width:min(560px,90vw);aspect-ratio:1/1;width:100%;display:block;
+  image-rendering:pixelated;image-rendering:crisp-edges;
 }
-
-.result-meta{
-  display:flex;
-  gap:36px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-
-.meta-key{
-  font-size:9px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:4px;
-}
-
-.meta-val{font-size:13px;color:var(--text);}
-
+.result-meta{display:flex;gap:36px;justify-content:center;flex-wrap:wrap;}
+.meta-key{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.meta-val{font-size:13px;color:var(--text);line-height:1.5;}
 .result-actions{display:flex;gap:9px;}
-
 .btn-ghost{
-  padding:11px 26px;
-  border-radius:100px;
-  border:1px solid var(--border);
-  background:transparent;
-  color:var(--muted);
-  font-size:12px;
-  cursor:pointer;
-  font-family:inherit;
+  padding:11px 26px;border-radius:100px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;
   transition:color .15s,border-color .15s;
 }
-
 .btn-ghost:hover{color:var(--text);border-color:#555;}
-
 .btn-solid{
-  padding:11px 26px;
-  border-radius:100px;
-  border:1px solid rgba(240,239,232,.2);
-  background:transparent;
-  color:var(--text);
-  font-size:12px;
-  cursor:pointer;
-  font-family:inherit;
+  padding:11px 26px;border-radius:100px;border:1px solid rgba(240,239,232,.2);
+  background:transparent;color:var(--text);font-size:12px;cursor:pointer;font-family:inherit;
   transition:background .15s,color .15s;
 }
-
 .btn-solid:hover{background:var(--text);color:#000;}
 </style>
 </head>
@@ -299,10 +134,15 @@ input[type=range]::-webkit-slider-thumb{
   <h1 class="headline">당신만의 시각적 아이덴티티를 생성하세요</h1>
 
   <div class="panels">
-    <div class="panel" id="panel-color">
-      <p class="panel-num">01 — 시각적 분석</p>
-      <p class="panel-title">색상 톤 선택</p>
-      <div class="tags" id="color-tags">
+
+    <!-- 01 시각적 분석 — 키워드 원래대로, 역할: 표현 방식(패턴·변환) -->
+    <div class="panel" id="panel-visual">
+      <div class="panel-header">
+        <p class="panel-num">01 — 시각적 분석</p>
+        <span class="panel-count" id="visual-count">0 / 6</span>
+      </div>
+      <p class="panel-title">표현 방식 선택</p>
+      <div class="tags" id="visual-tags">
         <button class="tag" data-val="warm">따뜻한</button>
         <button class="tag" data-val="urban">도시적인</button>
         <button class="tag" data-val="nature">자연의</button>
@@ -322,10 +162,14 @@ input[type=range]::-webkit-slider-thumb{
       </div>
     </div>
 
-    <div class="panel" id="panel-lang">
-      <p class="panel-num">02 — 언어적 분석</p>
-      <p class="panel-title">표현 방식 선택</p>
-      <div class="tags" id="lang-tags">
+    <!-- 02 언어적 분석 — 키워드 원래대로, 역할: 색상 톤 -->
+    <div class="panel" id="panel-verbal">
+      <div class="panel-header">
+        <p class="panel-num">02 — 언어적 분석</p>
+        <span class="panel-count" id="verbal-count">0 / 6</span>
+      </div>
+      <p class="panel-title">색상 톤 선택</p>
+      <div class="tags" id="verbal-tags">
         <button class="tag" data-val="emotional">감성적인</button>
         <button class="tag" data-val="logical">논리적인</button>
         <button class="tag" data-val="humorous">유머러스한</button>
@@ -337,17 +181,26 @@ input[type=range]::-webkit-slider-thumb{
         <button class="tag" data-val="meme">밈</button>
         <button class="tag" data-val="cozy">편안한</button>
         <button class="tag" data-val="global">글로벌한</button>
+        <button class="tag" data-val="trendy">트렌디한</button>
+        <button class="tag" data-val="layered">레이어드</button>
+        <button class="tag" data-val="mystical">신비로운</button>
+        <button class="tag" data-val="energetic">역동적인</button>
+        <button class="tag" data-val="classic">클래식한</button>
       </div>
     </div>
 
+    <!-- 03 반응 분석 -->
     <div class="panel">
-      <p class="panel-num">03 — 반응 분석</p>
+      <div class="panel-header">
+        <p class="panel-num">03 — 반응 분석</p>
+      </div>
       <p class="panel-title">평균 반응 수 입력</p>
       <div class="eng-val" id="eng-val">2,400</div>
       <div class="eng-unit">좋아요 · 댓글 · 저장 합산</div>
       <input type="range" id="eng-slider" min="100" max="50000" value="2400" step="100">
       <p class="eng-hint">수치가 높을수록 패턴 밀도가 증가합니다</p>
     </div>
+
   </div>
 
   <button class="gen-btn" id="gen-btn">아이덴티티 생성하기</button>
@@ -377,43 +230,92 @@ input[type=range]::-webkit-slider-thumb{
 <script>
 'use strict';
 
-// ── Color presets (c1=t:0, c2=t:0.5, c3=t:1) ──────────────────────────────
-const COLORS = {
-  // 기존
-  warm:       {c1:[255,100,38],  c2:[255,215,95],  c3:[140,22,12]},
-  urban:      {c1:[12,30,88],    c2:[198,218,255], c3:[50,90,170]},
-  nature:     {c1:[7,42,16],     c2:[192,238,25],  c3:[22,85,35]},
-  sensual:    {c1:[52,188,222],  c2:[255,255,255], c3:[198,42,202]},
-  dreamy:     {c1:[72,30,152],   c2:[250,210,255], c3:[172,65,212]},
-  minimal:    {c1:[16,16,16],    c2:[208,208,204], c3:[240,240,236]},
-  // 신규
-  everyday:   {c1:[135,110,85],  c2:[238,225,205], c3:[190,168,140]}, // 베이지·샌드 뉴트럴
-  natural:    {c1:[55,60,35],    c2:[185,188,145], c3:[90,100,60]},   // 머티드 올리브·세이지
-  chic:       {c1:[14,14,18],    c2:[145,142,148], c3:[238,234,232]}, // 다크 → 쿨그레이 → 오프화이트
-  city:       {c1:[5,15,45],     c2:[0,210,175],   c3:[255,235,70]},  // 네이비·야간도시 네온
-  kitsch:     {c1:[255,15,140],  c2:[255,255,0],   c3:[0,210,90]},    // 핫핑크·옐로·라임
-  y2k:        {c1:[0,235,215],   c2:[255,255,255], c3:[210,175,255]}, // 터콰이즈·화이트·라벤더
-  casual:     {c1:[195,158,240], c2:[255,232,210], c3:[140,210,200]}, // 라벤더·피치·민트
-  mixmatch:   {c1:[255,75,35],   c2:[252,245,195], c3:[0,175,200]},   // 오렌지·크림·틸
-  free:       {c1:[70,185,240],  c2:[235,248,255], c3:[155,225,255]}, // 스카이블루 그라디언트
-  achromatic: {c1:[10,10,10],    c2:[165,165,165], c3:[248,248,248]}, // 순수 무채색
+// ════════════════════════════════════════════════════════════════════════════
+// 01 시각적 분석 — 키워드: 따뜻한·도시적인·자연의...  역할: 패턴·변환 결정
+// ════════════════════════════════════════════════════════════════════════════
+
+// 패턴 가중치 [interference, staircase, diagonal, radial, cross]
+const PAT_W = {
+  warm:       [0.9, 0.0, 0.0, 0.1, 0.0], // 부드러운 간섭파 → 다이아몬드
+  urban:      [0.0, 0.8, 0.0, 0.0, 0.2], // 계단 + 격자 → 도시 그리드
+  nature:     [0.0, 0.0, 0.0, 0.9, 0.1], // 방사형 + 크로스 → 나이테
+  sensual:    [1.0, 0.0, 0.0, 0.0, 0.0], // 순수 간섭파 → 렌즈 다이아몬드
+  dreamy:     [0.2, 0.0, 0.0, 0.2, 0.6], // 크로스 지배 → 부드러운 격자
+  minimal:    [0.0, 0.0, 1.0, 0.0, 0.0], // 순수 대각선 → 클린 스트라이프
+  everyday:   [0.1, 0.0, 0.2, 0.1, 0.6], // 크로스 + 대각선 → 일상적 패턴
+  natural:    [0.0, 0.0, 0.1, 0.8, 0.1], // 방사형 지배 → 유기적 원형
+  chic:       [0.0, 0.0, 0.9, 0.1, 0.0], // 대각선 + 방사형 → 세련된 사선
+  city:       [0.0, 0.9, 0.1, 0.0, 0.0], // 계단 + 대각선 → 나이트시티
+  kitsch:     [0.5, 0.0, 0.0, 0.0, 0.5], // 간섭 + 크로스 50:50 → 팝아트
+  y2k:        [0.8, 0.0, 0.1, 0.1, 0.0], // 간섭 지배 → 홀로그래픽
+  casual:     [0.0, 0.0, 0.8, 0.0, 0.2], // 대각선 + 크로스 → 편안한 줄무늬
+  mixmatch:   [0.2, 0.2, 0.2, 0.2, 0.2], // 균등 믹스 → 예측불가 패턴
+  free:       [0.0, 0.0, 0.0, 1.0, 0.0], // 순수 방사형 → 동심원
+  achromatic: [0.0, 1.0, 0.0, 0.0, 0.0], // 순수 계단 → 정밀한 스텝
 };
 
-// ── Pattern presets ─────────────────────────────────────────────────────────
-const PATTERNS = {
-  // 기존
-  emotional:  {fn:'interference', xf:'mirror'},   // 미러 간섭 → 렌즈 다이아몬드
-  logical:    {fn:'staircase',    xf:'none'},      // 계단식 직각 밴드
-  humorous:   {fn:'diagonal',     xf:'rotate'},    // 회전 대각선 스트라이프
-  intuitive:  {fn:'radial',       xf:'none'},      // 동심원
-  narrative:  {fn:'cross',        xf:'reflect'},   // 반사 크로스 → 모래시계
-  // 신규
-  simple:     {fn:'diagonal',     xf:'none'},      // 심플 직선 밴드
-  intimate:   {fn:'interference', xf:'none'},      // 변환 없는 부드러운 간섭
-  liberating: {fn:'radial',       xf:'rotate'},    // 회전 동심원 → 소용돌이
-  meme:       {fn:'staircase',    xf:'rotate'},    // 회전 계단 → 유쾌한 픽셀
-  cozy:       {fn:'cross',        xf:'none'},      // 순수 크로스 → 격자
-  global:     {fn:'radial',       xf:'reflect'},   // 반사 동심원 → 지구본
+// 변환 가중치 [mirror, rotate, reflect]
+const XF_W = {
+  warm:       [1.0, 0.0, 0.0], // mirror  → 좌우 대칭
+  urban:      [0.0, 0.0, 0.0], // none    → 원형 유지
+  nature:     [0.0, 0.0, 0.0], // none    → 자연스럽게
+  sensual:    [1.0, 0.0, 0.0], // mirror  → 강한 대칭
+  dreamy:     [0.0, 0.0, 1.0], // reflect → 상하 반사
+  minimal:    [0.0, 0.0, 0.0], // none    → 그대로
+  everyday:   [0.0, 0.0, 0.0], // none
+  natural:    [0.0, 0.0, 1.0], // reflect → 반사 원형
+  chic:       [0.0, 1.0, 0.0], // rotate  → 회전 사선
+  city:       [0.0, 1.0, 0.0], // rotate  → 회전 그리드
+  kitsch:     [1.0, 0.0, 0.0], // mirror  → 대칭 팝
+  y2k:        [0.5, 0.0, 0.5], // mirror+reflect → 홀로그램
+  casual:     [0.0, 0.0, 0.0], // none
+  mixmatch:   [0.3, 0.4, 0.3], // 세 변환 혼합
+  free:       [0.0, 1.0, 0.0], // rotate  → 소용돌이
+  achromatic: [0.0, 0.0, 0.0], // none    → 순수 계단
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// 02 언어적 분석 — 키워드: 감성적인·논리적인·유머러스한...  역할: 색상 결정
+// ════════════════════════════════════════════════════════════════════════════
+
+// 색상 프리셋 (c1=t:0, c2=t:0.5, c3=t:1)
+const COLORS = {
+  emotional:  {c1:[180,48,172],  c2:[255,198,232], c3:[98,14,142]},   // 감성: 보라·핑크
+  logical:    {c1:[14,42,112],   c2:[172,212,255], c3:[34,72,158]},   // 논리: 딥블루
+  humorous:   {c1:[255,78,5],    c2:[255,238,52],  c3:[0,182,98]},    // 유머: 오렌지·옐로·그린
+  intuitive:  {c1:[218,72,38],   c2:[255,202,112], c3:[152,32,16]},   // 직관: 코랄·앰버
+  narrative:  {c1:[6,26,72],     c2:[52,178,192],  c3:[2,92,112]},    // 서사: 딥틸
+  simple:     {c1:[12,12,12],    c2:[192,192,188], c3:[240,240,236]}, // 심플: 무채색
+  intimate:   {c1:[212,92,112],  c2:[255,212,192], c3:[162,52,72]},   // 친밀: 웜핑크
+  liberating: {c1:[32,152,222],  c2:[212,242,255], c3:[92,198,238]},  // 자유: 스카이블루
+  meme:       {c1:[255,0,98],    c2:[255,255,0],   c3:[0,198,252]},   // 밈: 초고채도 트라이앵글
+  cozy:       {c1:[152,92,52],   c2:[236,206,162], c3:[92,58,30]},    // 편안: 어스톤
+  global:     {c1:[0,72,152],    c2:[92,192,172],  c3:[0,132,92]},    // 글로벌: 블루-그린
+  trendy:     {c1:[92,42,192],   c2:[212,192,255], c3:[52,16,142]},   // 트렌디: 쿨퍼플
+  layered:    {c1:[72,62,46],    c2:[186,176,146], c3:[46,40,26]},    // 레이어드: 머티드어스
+  mystical:   {c1:[36,6,76],     c2:[172,92,252],  c3:[16,2,52]},     // 신비: 딥퍼플
+  energetic:  {c1:[252,46,16],   c2:[255,176,26],  c3:[192,6,6]},     // 역동: 레드·오렌지
+  classic:    {c1:[16,26,66],    c2:[196,166,96],  c3:[6,12,36]},     // 클래식: 네이비·골드
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// 공통 레이블
+// ════════════════════════════════════════════════════════════════════════════
+const VISUAL_LABELS = {
+  warm:'따뜻한', urban:'도시적인', nature:'자연의',
+  sensual:'감각적인', dreamy:'몽환적인', minimal:'미니멀한',
+  everyday:'일상적인', natural:'자연스러운', chic:'시크',
+  city:'도시적', kitsch:'키치', y2k:'Y2K',
+  casual:'캐주얼', mixmatch:'믹스매치', free:'자유로운',
+  achromatic:'무채색',
+};
+const VERBAL_LABELS = {
+  emotional:'감성적인', logical:'논리적인', humorous:'유머러스한',
+  intuitive:'직관적인', narrative:'서사적인',
+  simple:'심플한', intimate:'친밀한', liberating:'자유로운',
+  meme:'밈', cozy:'편안한', global:'글로벌한',
+  trendy:'트렌디한', layered:'레이어드', mystical:'신비로운',
+  energetic:'역동적인', classic:'클래식한',
 };
 
 const PHASE_MSGS = [
@@ -423,51 +325,54 @@ const PHASE_MSGS = [
   [0.88,'아이덴티티를 합성하는 중...'],
 ];
 
-const COLOR_LABELS = {
-  warm:'따뜻한', urban:'도시적인', nature:'자연의',
-  sensual:'감각적인', dreamy:'몽환적인', minimal:'미니멀한',
-  everyday:'일상적인', natural:'자연스러운', chic:'시크',
-  city:'도시적', kitsch:'키치', y2k:'Y2K',
-  casual:'캐주얼', mixmatch:'믹스매치', free:'자유로운',
-  achromatic:'무채색',
-};
-const LANG_LABELS = {
-  emotional:'감성적인', logical:'논리적인', humorous:'유머러스한',
-  intuitive:'직관적인', narrative:'서사적인',
-  simple:'심플한', intimate:'친밀한', liberating:'자유로운',
-  meme:'밈', cozy:'편안한', global:'글로벌한',
-};
+const MAX_SELECT = 6;
 
-// ── App state ───────────────────────────────────────────────────────────────
-const sel = {color:null, lang:null, engagement:2400};
+// ── 앱 상태 ──────────────────────────────────────────────────────────────────
+// sel.visual : 시각적 분석 선택 (따뜻한 등) → PAT_W + XF_W 에 매핑
+// sel.verbal : 언어적 분석 선택 (감성적인 등) → COLORS 에 매핑
+const sel = {visual:[], verbal:[], engagement:2400};
 let genConfig = null;
 let animRaf   = null;
 
-// ── Helpers ─────────────────────────────────────────────────────────────────
+// ── 헬퍼 ─────────────────────────────────────────────────────────────────────
 function showStep(id){
   document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
-function flash(panelId){
-  const el=document.getElementById(panelId);
+function flash(id){
+  const el=document.getElementById(id);
   el.classList.add('flash');
   setTimeout(()=>el.classList.remove('flash'),900);
 }
 
-// ── Step 1: inputs ──────────────────────────────────────────────────────────
-function initTagGroup(groupId, key){
-  document.getElementById(groupId).addEventListener('click',e=>{
+// ── 태그 멀티셀렉트 ───────────────────────────────────────────────────────────
+function initTagGroup(groupId, stateKey, countId){
+  const container=document.getElementById(groupId);
+  const countEl=document.getElementById(countId);
+
+  container.addEventListener('click', e=>{
     const btn=e.target.closest('.tag');
-    if(!btn) return;
-    document.getElementById(groupId).querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));
-    btn.classList.add('on');
-    sel[key]=btn.dataset.val;
+    if(!btn||btn.classList.contains('maxed')) return;
+    const val=btn.dataset.val, arr=sel[stateKey];
+    const idx=arr.indexOf(val);
+
+    if(idx>=0){ arr.splice(idx,1); btn.classList.remove('on'); }
+    else{
+      if(arr.length>=MAX_SELECT) return;
+      arr.push(val); btn.classList.add('on');
+    }
+
+    const atMax=arr.length>=MAX_SELECT;
+    container.querySelectorAll('.tag').forEach(t=>{
+      if(!t.classList.contains('on')) t.classList.toggle('maxed',atMax);
+    });
+    countEl.textContent=`${arr.length} / ${MAX_SELECT}`;
+    countEl.classList.toggle('active', arr.length>0);
   });
 }
 
-initTagGroup('color-tags','color');
-initTagGroup('lang-tags','lang');
+initTagGroup('visual-tags','visual','visual-count');
+initTagGroup('verbal-tags','verbal','verbal-count');
 
 const slider=document.getElementById('eng-slider');
 const engVal=document.getElementById('eng-val');
@@ -476,91 +381,103 @@ slider.addEventListener('input',()=>{
   engVal.textContent=sel.engagement.toLocaleString();
 });
 
-// ── Pixel engine ─────────────────────────────────────────────────────────────
+// ── 블렌딩 유틸 ──────────────────────────────────────────────────────────────
+function blendColors(keys){
+  const n=keys.length;
+  const s={c1:[0,0,0],c2:[0,0,0],c3:[0,0,0]};
+  for(const k of keys){
+    const p=COLORS[k];
+    for(let i=0;i<3;i++){s.c1[i]+=p.c1[i]/n;s.c2[i]+=p.c2[i]/n;s.c3[i]+=p.c3[i]/n;}
+  }
+  return s;
+}
+
+function avgVecs(vecs){
+  if(!vecs.length) return new Array(5).fill(0);
+  const n=vecs.length, len=vecs[0].length;
+  const out=new Array(len).fill(0);
+  for(const v of vecs) for(let i=0;i<len;i++) out[i]+=v[i]/n;
+  return out;
+}
+
+function hashOffset(visual, verbal){
+  const str=[...visual].sort().join(',')+"|"+[...verbal].sort().join(',');
+  let h=5381;
+  for(const c of str) h=((h<<5)+h+c.charCodeAt(0))&0x7fffffff;
+  return(h%997)/997;
+}
+
+// ── Config 빌드 ───────────────────────────────────────────────────────────────
+function buildConfig(){
+  const{visual, verbal, engagement}=sel;
+  return{
+    colors:  blendColors(verbal),                    // 언어적 → 색상
+    patW:    avgVecs(visual.map(k=>PAT_W[k])),       // 시각적 → 패턴
+    xfW:     avgVecs(visual.map(k=>XF_W[k])),        // 시각적 → 변환
+    offset:  hashOffset(visual, verbal),
+    freq:    2.5 + (Math.log(Math.max(engagement,100)/100)/Math.log(500)) * 7.5,
+  };
+}
+
+// ── 픽셀 엔진 ────────────────────────────────────────────────────────────────
 function lerp3(c1,c2,c3,t){
   t=Math.max(0,Math.min(1,t));
-  let a,b,u;
-  if(t<=.5){a=c1;b=c2;u=t*2;}
-  else     {a=c2;b=c3;u=(t-.5)*2;}
+  const[a,b,u]=t<=.5?[c1,c2,t*2]:[c2,c3,(t-.5)*2];
   return[a[0]+(b[0]-a[0])*u, a[1]+(b[1]-a[1])*u, a[2]+(b[2]-a[2])*u];
 }
 
-function patternVal(nx,ny,fn,xf,freq){
-  let x=nx, y=ny;
-
-  switch(xf){
-    case 'mirror':  x=Math.abs(x); break;
-    case 'rotate':{
-      const a=Math.PI/4.5;
-      const rx=x*Math.cos(a)-y*Math.sin(a);
-      const ry=x*Math.sin(a)+y*Math.cos(a);
-      x=rx; y=ry; break;
-    }
-    case 'reflect': y=Math.abs(y); break;
-  }
-
-  const f=freq*Math.PI;
-  switch(fn){
-    case 'interference':
-      return Math.sin(x*f)*Math.sin(y*f);
-    case 'staircase':{
-      const steps=Math.max(3,Math.round(freq*1.6));
-      const sx=Math.floor(x*steps)/steps;
-      const sy=Math.floor(y*steps)/steps;
-      return Math.sin((sx+sy)*f*.9);
-    }
-    case 'diagonal':
-      return Math.sin((x+y)*f);
-    case 'radial':
-      return Math.sin(Math.hypot(x,y)*f*1.4);
-    case 'cross':
-      return .5*(Math.sin(x*f)+Math.sin(y*f));
-    default:
-      return Math.sin(x*f)*Math.sin(y*f);
-  }
+function blendCoords(x,y,xfW){
+  const[wm,wr,wrf]=xfW;
+  const wn=Math.max(0,1-wm-wr-wrf), tot=wn+wm+wr+wrf||1;
+  const a=Math.PI/4.5, rx=x*Math.cos(a)-y*Math.sin(a), ry=x*Math.sin(a)+y*Math.cos(a);
+  return[
+    (wn*x+wm*Math.abs(x)+wr*rx+wrf*x)/tot,
+    (wn*y+wm*y          +wr*ry+wrf*Math.abs(y))/tot,
+  ];
 }
 
-function drawPattern(canvas, cfg, progress, time, scale){
+function blendPatternVal(bx,by,patW,freq,phase){
+  const f=freq*Math.PI;
+  const steps=Math.max(3,Math.round(freq*1.6));
+  const sx=Math.floor(bx*steps)/steps, sy=Math.floor(by*steps)/steps;
+  const vI=Math.sin(bx*f+phase)*Math.sin(by*f+phase);
+  const vS=Math.sin((sx+sy)*f*.9+phase);
+  const vD=Math.sin((bx+by)*f+phase);
+  const vR=Math.sin(Math.hypot(bx,by)*f*1.4+phase);
+  const vC=.5*(Math.sin(bx*f+phase)+Math.sin(by*f+phase));
+  const[wi,ws,wd,wr,wc]=patW, tot=wi+ws+wd+wr+wc||1;
+  return(wi*vI+ws*vS+wd*vD+wr*vR+wc*vC)/tot;
+}
+
+function drawPattern(canvas,cfg,progress,time,scale){
   const ctx=canvas.getContext('2d');
   const W=canvas.width, H=canvas.height;
-  const sc=scale||5;
-  const lW=Math.ceil(W/sc), lH=Math.ceil(H/sc);
-  const img=ctx.createImageData(W,H);
-  const d=img.data;
+  const sc=scale||5, lW=Math.ceil(W/sc), lH=Math.ceil(H/sc);
+  const img=ctx.createImageData(W,H), d=img.data;
 
-  const {fn,xf,colors:{c1,c2,c3}}=cfg;
-  const p=progress==null?1:progress;
-  const noise=1-p;
-  // frequency converges from low to final
-  const eff=cfg.freq*(0.25+0.75*p);
+  const{patW,xfW,freq,offset,colors:{c1,c2,c3}}=cfg;
+  const p=progress==null?1:progress, noise=1-p;
+  const eff=freq*(0.25+0.75*p), phase=offset*Math.PI*2;
 
   for(let py=0;py<lH;py++){
     for(let px=0;px<lW;px++){
-      const nx=(px/lW)*2-1;
-      const ny=(py/lH)*2-1;
-
-      // animated warp during analysis
+      const nx=(px/lW)*2-1, ny=(py/lH)*2-1;
       const warp=noise*.55*Math.sin(nx*9.1+time*2.2+ny*6.3);
-      let v=patternVal(nx+warp, ny+warp*.6, fn, xf, eff);
+      const[bx,by]=blendCoords(nx+warp,ny+warp*.6,xfW);
+      let v=blendPatternVal(bx,by,patW,eff,phase);
 
-      // blend with noise early on
       if(noise>0){
         const r=Math.sin(nx*25.7+time*1.4)*Math.cos(ny*19.3-time*2.3);
         v=v*p+r*noise*.55;
       }
 
       const t=(v+1)/2;
-      let [r,g,b]=lerp3(c1,c2,c3,t);
-
-      // desaturate during anim
+      let[r,g,b]=lerp3(c1,c2,c3,t);
       if(noise>0){
         const gr=r*.299+g*.587+b*.114;
-        r=r*p+gr*noise;
-        g=g*p+gr*noise;
-        b=b*p+gr*noise;
+        r=r*p+gr*noise; g=g*p+gr*noise; b=b*p+gr*noise;
       }
 
-      // fill block
       const ir=r|0, ig=g|0, ib=b|0;
       for(let dy=0;dy<sc;dy++){
         const row=py*sc+dy; if(row>=H) break;
@@ -575,80 +492,55 @@ function drawPattern(canvas, cfg, progress, time, scale){
   ctx.putImageData(img,0,0);
 }
 
-// ── Generate ─────────────────────────────────────────────────────────────────
+// ── 생성 ─────────────────────────────────────────────────────────────────────
 document.getElementById('gen-btn').addEventListener('click',()=>{
   let ok=true;
-  if(!sel.color){flash('panel-color');ok=false;}
-  if(!sel.lang) {flash('panel-lang'); ok=false;}
+  if(!sel.visual.length){flash('panel-visual');ok=false;}
+  if(!sel.verbal.length){flash('panel-verbal');ok=false;}
   if(!ok) return;
 
-  // engagement → frequency: log scale, range 2.5–10
-  const dt=Math.log(Math.max(sel.engagement,100)/100)/Math.log(500);
-  const freq=2.5+dt*7.5;
-
-  genConfig={
-    fn:     PATTERNS[sel.lang].fn,
-    xf:     PATTERNS[sel.lang].xf,
-    freq:   freq,
-    colors: COLORS[sel.color],
-  };
-
+  genConfig=buildConfig();
   if(animRaf) cancelAnimationFrame(animRaf);
   showStep('s2');
 
-  // Size anim canvas to viewport (retina-aware)
   const dpr=Math.min(devicePixelRatio,2);
-  const animCanvas=document.getElementById('anim-canvas');
-  animCanvas.width =window.innerWidth *dpr;
-  animCanvas.height=window.innerHeight*dpr;
-  animCanvas.style.width =window.innerWidth +'px';
-  animCanvas.style.height=window.innerHeight+'px';
+  const ac=document.getElementById('anim-canvas');
+  ac.width=window.innerWidth*dpr; ac.height=window.innerHeight*dpr;
+  ac.style.width=window.innerWidth+'px'; ac.style.height=window.innerHeight+'px';
+  const animScale=Math.max(7,Math.round(Math.min(ac.width,ac.height)/100));
 
-  // Large scale for animation (perf + drama)
-  const animScale=Math.max(7,Math.round(Math.min(animCanvas.width,animCanvas.height)/100));
-
-  const DURATION=3400;
-  const t0=performance.now();
+  const DURATION=3400, t0=performance.now();
   const progFill=document.getElementById('prog-fill');
-  const phaseEl =document.getElementById('phase-text');
+  const phaseEl=document.getElementById('phase-text');
 
   function frame(now){
-    const elapsed=now-t0;
-    const p=Math.min(elapsed/DURATION,1);
-
+    const elapsed=now-t0, p=Math.min(elapsed/DURATION,1);
     progFill.style.width=(p*100)+'%';
-
     let label=PHASE_MSGS[0][1];
     for(const[thr,txt] of PHASE_MSGS) if(p>=thr) label=txt;
     phaseEl.textContent=label;
-
-    drawPattern(animCanvas, genConfig, p, elapsed/1000, animScale);
-
-    if(p<1){
-      animRaf=requestAnimationFrame(frame);
-    } else {
-      setTimeout(showFinal,380);
-    }
+    drawPattern(ac,genConfig,p,elapsed/1000,animScale);
+    if(p<1){ animRaf=requestAnimationFrame(frame); }
+    else   { setTimeout(showFinal,380); }
   }
-
   animRaf=requestAnimationFrame(frame);
 });
 
-// ── Final result ─────────────────────────────────────────────────────────────
+// ── 결과 ─────────────────────────────────────────────────────────────────────
 function showFinal(){
   showStep('s3');
   const rc=document.getElementById('result-canvas');
   rc.width=560; rc.height=560;
-  drawPattern(rc, genConfig, 1, 0, 4);
+  drawPattern(rc,genConfig,1,0,4);
 
   document.getElementById('result-meta').innerHTML=`
     <div class="meta-item">
-      <div class="meta-key">Color Tone</div>
-      <div class="meta-val">${COLOR_LABELS[sel.color]}</div>
+      <div class="meta-key">Expression Style</div>
+      <div class="meta-val">${sel.visual.map(k=>VISUAL_LABELS[k]).join(' · ')}</div>
     </div>
     <div class="meta-item">
-      <div class="meta-key">Pattern Style</div>
-      <div class="meta-val">${LANG_LABELS[sel.lang]}</div>
+      <div class="meta-key">Color Tone</div>
+      <div class="meta-val">${sel.verbal.map(k=>VERBAL_LABELS[k]).join(' · ')}</div>
     </div>
     <div class="meta-item">
       <div class="meta-key">Density</div>
@@ -657,12 +549,20 @@ function showFinal(){
   `;
 }
 
-// ── Actions ──────────────────────────────────────────────────────────────────
+// ── 리셋 ─────────────────────────────────────────────────────────────────────
 document.getElementById('reset-btn').addEventListener('click',()=>{
   if(animRaf) cancelAnimationFrame(animRaf);
+  sel.visual=[]; sel.verbal=[];
+  document.querySelectorAll('.tag').forEach(t=>t.classList.remove('on','maxed'));
+  ['visual-count','verbal-count'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.textContent=`0 / ${MAX_SELECT}`;
+    el.classList.remove('active');
+  });
   showStep('s1');
 });
 
+// ── 저장 ─────────────────────────────────────────────────────────────────────
 document.getElementById('save-btn').addEventListener('click',()=>{
   const rc=document.getElementById('result-canvas');
   const a=document.createElement('a');
